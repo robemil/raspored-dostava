@@ -263,13 +263,13 @@ function rowTemplate(id, data){
   const tdDate = document.createElement('td');
   const inpDate = document.createElement('input'); inpDate.className='cell-text'; inpDate.type='date';
   inpDate.value = data.date || '';
-  inpDate.addEventListener('change', ()=>updateRow(id,{date:inpDate.value}));
+  inpDate.addEventListener('change', ()=>{ if(!inpDate.value) return; updateRow(id,{date:inpDate.value}); });
   tdDate.appendChild(inpDate); tr.appendChild(tdDate);
 
   const tdTime = document.createElement('td');
   const inpTime = document.createElement('input'); inpTime.className='cell-text'; inpTime.type='time';
   inpTime.value = data.time || '';
-  inpTime.addEventListener('change', ()=>updateRow(id,{time:inpTime.value}));
+  inpTime.addEventListener('change', ()=>{ if(!inpTime.value) return; updateRow(id,{time:inpTime.value}); });
   tdTime.appendChild(inpTime); tr.appendChild(tdTime);
 
   ['kombi','kamion'].forEach(key=>{
@@ -349,6 +349,7 @@ async function addRow(){
 }
 
 document.getElementById('weekStart').addEventListener('change', async (e)=>{
+  if(!e.target.value) return; // ignoriraj privremeni prazan unos dok se datum jos tipka
   await apiPost({action:'setMeta', meta:{ startDate:e.target.value, dispecer:document.getElementById('dispecerName').value||'' }});
   renderDayHeaders(e.target.value);
 });
